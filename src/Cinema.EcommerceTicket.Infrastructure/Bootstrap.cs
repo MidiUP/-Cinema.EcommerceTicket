@@ -1,4 +1,5 @@
 ﻿using Cinema.EcommerceTicket.Domain.Infrastructure.Repositories;
+using Cinema.EcommerceTicket.Infrastructure.HttpClients;
 using Cinema.EcommerceTicket.Infrastructure.MongoDb;
 using Cinema.EcommerceTicket.Infrastructure.RabbitMq;
 using Cinema.EcommerceTicket.Infrastructure.Repositories;
@@ -10,22 +11,13 @@ public static class Bootstrap
 {
     public static void AddInfrastructureServices(this IServiceCollection services)
     {
-        AddRepositories(services);
-        AddMongoDb(services);
-        AddRabbitMq(services);
-    }
-
-    private static void AddMongoDb(IServiceCollection services)
-    {
+        services.AddRepositories();
         services.AddMongoDb();
-    }
-
-    private static void AddRabbitMq(IServiceCollection services)
-    {
         services.AddRabbitMq();
+        services.AddHttpClients();
     }
 
-    private static void AddRepositories(IServiceCollection services)
+    private static void AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<ITicketRepository, TicketRepository>();
     }
