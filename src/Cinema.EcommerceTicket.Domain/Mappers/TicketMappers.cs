@@ -1,6 +1,6 @@
 ﻿using Cinema.EcommerceTicket.Domain.Dtos.Requests;
-using Cinema.Domain.Events;
 using Cinema.EcommerceTicket.Domain.Models;
+using Cinema.EcommerceTicket.Domain.Events;
 
 namespace Cinema.EcommerceTicket.Domain.Mappers;
 

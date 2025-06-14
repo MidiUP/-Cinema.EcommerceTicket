@@ -1,6 +1,6 @@
 ﻿using MongoDB.Driver;
 
-namespace Cinema.EcommerceTicket.Domain.Infrastructure
+namespace Cinema.EcommerceTicket.Infrastructure.MongoDb
 {
     public interface IMongoUnitOfWork
     {

@@ -1,5 +1,4 @@
-﻿using Cinema.EcommerceTicket.Domain.Infrastructure;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 
 namespace Cinema.EcommerceTicket.Infrastructure.MongoDb;
 

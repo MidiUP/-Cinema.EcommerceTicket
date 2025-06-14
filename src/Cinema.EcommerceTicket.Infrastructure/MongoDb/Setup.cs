@@ -1,5 +1,4 @@
-﻿using Cinema.EcommerceTicket.Domain.Infrastructure;
-using Cinema.EcommerceTicket.Domain.Shared;
+﻿using Cinema.EcommerceTicket.Domain.Shared;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 

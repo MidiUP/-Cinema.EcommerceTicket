@@ -1,6 +1,5 @@
 ﻿using Cinema.EcommerceTicket.API.Attributes;
 using Cinema.EcommerceTicket.Domain.Dtos.Responses;
-using Cinema.EcommerceTicket.Domain.Models;
 using Cinema.EcommerceTicket.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +14,7 @@ public class TicketController(ITicketService ticketService) : CinemaEcommerceTic
     [HttpGet("{customerId}")]
     [ProducesResponseType<IEnumerable<GetTicketResponseDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType<ErrorResponseDto>(StatusCodes.Status408RequestTimeout)]
     [ProducesResponseType<ErrorResponseDto>(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> CheckInTicketAsync([FromRoute] string customerId)
     {

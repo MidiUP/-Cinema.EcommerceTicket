@@ -1,6 +1,4 @@
-﻿using Cinema.Domain.Events;
-
-namespace Cinema.Domain.Events;
+﻿namespace Cinema.EcommerceTicket.Domain.Events;
 
 public class EcommerceCreateTicketEvent : Event
 {

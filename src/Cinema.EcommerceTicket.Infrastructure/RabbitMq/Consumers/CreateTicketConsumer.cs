@@ -1,4 +1,4 @@
-﻿using Cinema.Domain.Events;
+﻿using Cinema.EcommerceTicket.Domain.Events;
 using Cinema.EcommerceTicket.Domain.Mappers;
 using Cinema.EcommerceTicket.Domain.Services.Interfaces;
 using MassTransit;

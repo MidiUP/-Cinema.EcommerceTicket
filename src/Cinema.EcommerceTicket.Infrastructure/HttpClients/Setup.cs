@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Extensions.Http;
+using Polly.Retry;
 
 namespace Cinema.EcommerceTicket.Infrastructure.HttpClients;
 
@@ -10,7 +11,6 @@ public static class Setup
     public static void AddHttpClients(this IServiceCollection services)
     {
         services.AddCatalogApiHttpClient();
-        //services.AddHandlersHttp(); exemplo de como adicionar handlers personalizados
     }
 
     private static void AddCatalogApiHttpClient(this IServiceCollection services)
@@ -20,15 +20,9 @@ public static class Setup
             httpClient.BaseAddress = new Uri(Constants.CatalogApi.BASE_URL);
         })
         .AddPolicyHandler(GetRetryPolicy());
-        //.AddHttpMessageHandler<AuthenticateCustomHandler<SensediaGatewayAdapter>>();
     }
 
-    private static void AddHandlersHttp(this IServiceCollection services)
-    {
-        //services.AddTransient<AuthenticateCustomHandler<SensediaGatewayAdapter>>(); // exemplo de como adicionar handler de autenticação personalizado
-    }
-
-    private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+    private static AsyncRetryPolicy<HttpResponseMessage> GetRetryPolicy()
     {
         return HttpPolicyExtensions
             .HandleTransientHttpError()

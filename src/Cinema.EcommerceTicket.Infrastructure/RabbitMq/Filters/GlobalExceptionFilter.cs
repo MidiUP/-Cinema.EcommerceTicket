@@ -18,6 +18,10 @@ public class GlobalExceptionFilter<T>(ILogger<GlobalExceptionFilter<T>> logger) 
         catch(CinemaEcommerceTicketException ex)
         {
             _logger.LogWarning(ex, "Erro de regra de negócio ao processar mensagem do tipo {MessageType}: {Errors}", typeof(T).Name, ex.Errors);
+        }catch(OperationCanceledException ex)
+        {
+            _logger.LogWarning(ex, "Timeout ao processar mensagem do tipo {MessageType}", typeof(T).Name);
+            throw;
         }
         catch (Exception ex)
         {
