@@ -4,5 +4,5 @@ namespace Cinema.EcommerceTicket.Domain.Infrastructure.ApiFacades;
 
 public interface ICatalogApiFacade
 {
-    public Task<IEnumerable<DetailsMovieModel>> GetDetailsMovieAsync(int movieId, CancellationToken cancellationToken);
+    public Task<DetailsMovieModel> GetDetailsMovieAsync(int movieId, CancellationToken cancellationToken);
 }

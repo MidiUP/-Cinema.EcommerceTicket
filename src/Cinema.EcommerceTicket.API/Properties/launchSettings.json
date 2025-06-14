@@ -14,7 +14,8 @@
         "QUEUE_CREATE_ECOMMERCE_TICKET_NAME": "cinema-ecommerce-criacao-ticket",
         "MONGODB_CONNECTION_STRING": "mongodb://root:example@localhost:27018?retryWrites=false",
         "MONGODB_DATABASE_NAME": "cinema_ecommerce_ticket",
-        "MONGODB_TICKETS_COLLECTION_NAME": "tickets"
+        "MONGODB_TICKETS_COLLECTION_NAME": "tickets",
+        "CATALOG_API_BASE_URL": "http://localhost:5093/api/v1"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5045"

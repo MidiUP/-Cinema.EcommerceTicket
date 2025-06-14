@@ -1,6 +1,6 @@
-﻿using Cinema.EcommerceTicket.Domain.Events;
-using Cinema.EcommerceTicket.Domain.Mappers;
+﻿using Cinema.EcommerceTicket.Domain.Mappers;
 using Cinema.EcommerceTicket.Domain.Services.Interfaces;
+using Cinema.Events;
 using MassTransit;
 
 namespace Cinema.EcommerceTicket.Infrastructure.RabbitMq.Consumers;

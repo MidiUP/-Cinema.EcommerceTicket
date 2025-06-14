@@ -9,7 +9,7 @@ public static class Constants
     public static class CatalogApi
     {
         public static string NAME => "CatalogApi";
-        public static string BASE_URL => Environment.GetEnvironmentVariable("CATALOG_API_BASE_URL") ?? throw new ConfigurationErrorsException("A variável de amibente CATALOG_API_URL não pode ser nula.");
+        public static string BASE_URL => Environment.GetEnvironmentVariable("CATALOG_API_BASE_URL") ?? throw new ConfigurationErrorsException("A variável de amibente CATALOG_API_BASE_URL não pode ser nula.");
     }
 
     public static class RabbitMq

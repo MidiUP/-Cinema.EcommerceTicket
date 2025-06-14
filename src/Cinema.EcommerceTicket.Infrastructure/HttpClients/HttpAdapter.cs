@@ -15,7 +15,7 @@ public static class HttpAdapter
 
         //desserializar
         var content = await response.Content.ReadAsStringAsync();
-        return JsonConvert.DeserializeObject<TResponse>(content);
+        return JsonConvert.DeserializeObject<TResponse>(content)!;
 
     }
     public static Task<TResponse> PostAsync<TRequest, TResponse>(this HttpClient client, string url, TRequest request, CancellationToken cancellationToken = default)

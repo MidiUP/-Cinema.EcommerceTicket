@@ -51,6 +51,7 @@ public class ExceptionFilter(ILogger<ExceptionFilter> logger) : IExceptionFilter
     {
         context.Result = new ObjectResult(errorResponseDto);
         context.HttpContext.Response.StatusCode = statusCode;
+        return;
     }
 
 }
