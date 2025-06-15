@@ -1,5 +1,8 @@
-﻿namespace Cinema.EcommerceTicket.Domain.Exceptions;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace Cinema.EcommerceTicket.Domain.Exceptions;
+
+[ExcludeFromCodeCoverage]
 public abstract class CinemaEcommerceTicketException : Exception
 {
     public abstract int ERROR_CODE { get; }

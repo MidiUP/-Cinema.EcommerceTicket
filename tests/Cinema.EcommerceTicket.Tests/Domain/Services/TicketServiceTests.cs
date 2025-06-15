@@ -1,4 +1,5 @@
-﻿using Cinema.EcommerceTicket.Domain.Exceptions;
+﻿using AutoFixture;
+using Cinema.EcommerceTicket.Domain.Exceptions;
 using Cinema.EcommerceTicket.Domain.Infrastructure.ApiFacades;
 using Cinema.EcommerceTicket.Domain.Infrastructure.Cache;
 using Cinema.EcommerceTicket.Domain.Infrastructure.Repositories;
@@ -6,6 +7,7 @@ using Cinema.EcommerceTicket.Domain.Models;
 using Cinema.EcommerceTicket.Domain.Models.Catalog;
 using Cinema.EcommerceTicket.Domain.Services;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver.Core.Misc;
 using Moq;
 
 namespace Cinema.EcommerceTicket.Tests.Domain.Services;
@@ -17,6 +19,8 @@ public class TicketServiceTests
     private readonly Mock<ICatalogApiFacade> _catalogApiFacadeMock = new();
     private readonly Mock<ICacheRepository> _cacheRepositoryMock = new();
 
+    private readonly Fixture _fixture = new Fixture();
+
     private TicketService CreateService() =>
         new(_loggerMock.Object, _ticketRepositoryMock.Object, _catalogApiFacadeMock.Object, _cacheRepositoryMock.Object);
 
@@ -25,7 +29,7 @@ public class TicketServiceTests
     {
         // Arrange
         var ticket = new TicketModel { MovieId = 1, CustomerId = 1, Price = 10m };
-        var detailsMovie = new DetailsMovieModel();
+        var detailsMovie = _fixture.Create<DetailsMovieModel>();
         _cacheRepositoryMock.Setup(x => x.ExistsAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
         _catalogApiFacadeMock.Setup(x => x.GetDetailsMovieAsync(ticket.MovieId, It.IsAny<CancellationToken>())).ReturnsAsync(detailsMovie);
         _ticketRepositoryMock.Setup(x => x.CreateTicketAsync(It.IsAny<TicketModel>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);

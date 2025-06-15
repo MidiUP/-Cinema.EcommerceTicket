@@ -1,7 +1,9 @@
-﻿using System.Net;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net;
 
 namespace Cinema.EcommerceTicket.Domain.Exceptions;
 
+[ExcludeFromCodeCoverage]
 public class TimeoutException : CinemaEcommerceTicketException
 {
     const string ERROR_EXCEPTION_MESSAGE = "Timeout Exception";

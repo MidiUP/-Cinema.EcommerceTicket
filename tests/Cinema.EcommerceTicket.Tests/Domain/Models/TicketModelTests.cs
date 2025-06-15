@@ -12,7 +12,8 @@ public class TicketModelTests
         {
             MovieId = 1,
             CustomerId = 1,
-            Price = 10.0m
+            Price = 10.0m,
+            CheckInId = 0,
         };
 
         // Act
