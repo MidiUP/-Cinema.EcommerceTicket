@@ -16,7 +16,7 @@
         "MONGODB_DATABASE_NAME": "cinema_ecommerce_ticket",
         "MONGODB_TICKETS_COLLECTION_NAME": "tickets",
         "CATALOG_API_BASE_URL": "http://localhost:5002/api/v1",
-        "REDIS_CONNECTION_STRING": "localhost:6379,password=MinhaSenhaRedis"
+        "REDIS_CONNECTION_STRING": "localhost:6379,password=MinhaSenhaRedis,abortConnect=false"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5045"

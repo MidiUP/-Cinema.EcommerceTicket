@@ -2,7 +2,6 @@
 using Cinema.EcommerceTicket.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Logging;
 using System.Net;
 
 namespace Cinema.EcommerceTicket.API.Filters;

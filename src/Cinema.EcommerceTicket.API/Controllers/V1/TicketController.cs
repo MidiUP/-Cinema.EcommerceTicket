@@ -2,9 +2,11 @@
 using Cinema.EcommerceTicket.Domain.Dtos.Responses;
 using Cinema.EcommerceTicket.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Cinema.EcommerceTicket.API.Controllers.V1;
 
+[ExcludeFromCodeCoverage]
 [ApiVersion("1.0")]
 [CinemaEcommerceTicketVersionedRoute("1")]
 public class TicketController(ITicketService ticketService) : CinemaEcommerceTicketControllerBase

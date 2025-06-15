@@ -26,7 +26,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Cinema.EcommerceTicket.API\Cinema.EcommerceTicket.API.csproj" />
     <ProjectReference Include="..\..\src\Cinema.EcommerceTicket.Domain\Cinema.EcommerceTicket.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="API\Infrastructure\ApiFacades\" />
   </ItemGroup>
 
 </Project>
