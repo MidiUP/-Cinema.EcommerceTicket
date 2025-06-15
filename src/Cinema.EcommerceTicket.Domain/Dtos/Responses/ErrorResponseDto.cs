@@ -1,5 +1,8 @@
-﻿namespace Cinema.EcommerceTicket.Domain.Dtos.Responses
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Cinema.EcommerceTicket.Domain.Dtos.Responses
 {
+    [ExcludeFromCodeCoverage]
     public record ErrorResponseDto
     {
         public List<string>? Errors { get; set; }

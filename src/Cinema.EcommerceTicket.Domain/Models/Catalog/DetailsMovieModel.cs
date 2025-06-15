@@ -1,13 +1,16 @@
-﻿namespace Cinema.EcommerceTicket.Domain.Models.Catalog
-{
+﻿using System.Diagnostics.CodeAnalysis;
 
-	public class Genre
+namespace Cinema.EcommerceTicket.Domain.Models.Catalog
+{
+    [ExcludeFromCodeCoverage]
+    public class Genre
 	{
 		public int Id { get; set; }
 		public string Name { get; set; } = null!;
     }
 
-	public class ProductionCompany
+    [ExcludeFromCodeCoverage]
+    public class ProductionCompany
 	{
 		public int Id { get; set; }
 		public string LogoPath { get; set; } = null!;
@@ -15,13 +18,15 @@
         public string OriginCountry { get; set; } = null!;
     }
 
-	public class ProductionCountry
+    [ExcludeFromCodeCoverage]
+    public class ProductionCountry
 	{
 		public string Iso3166_1 { get; set; } = null!;
         public string Name { get; set; } = null!;
     }
 
-	public class SpokenLanguage
+    [ExcludeFromCodeCoverage]
+    public class SpokenLanguage
 	{
 		public string EnglishName { get; set; } = null!;
         public string Iso639_1 { get; set; } = null!;

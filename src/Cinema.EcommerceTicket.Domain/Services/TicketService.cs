@@ -28,7 +28,7 @@ public class TicketService(ILogger<TicketService> logger,
 
         //validar se filme existe
         _ = await GetDetailsMovieAsync(ticketModel.MovieId, cts.Token)
-            ?? throw new ValidationException($"Filme com ID {ticketModel.MovieId} não encontrado.");
+            ?? throw new DomainException($"Filme com ID {ticketModel.MovieId} não encontrado.");
 
         //lógica para calcular preço seria aplicada aqui, gerando número aleatório para simular preço
         ticketModel.Price = Math.Round((decimal)(new Random().NextDouble() * 100), 2);

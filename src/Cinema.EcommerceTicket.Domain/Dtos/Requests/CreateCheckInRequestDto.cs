@@ -1,5 +1,8 @@
-﻿namespace Cinema.EcommerceTicket.Domain.Dtos.Requests;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace Cinema.EcommerceTicket.Domain.Dtos.Requests;
+
+[ExcludeFromCodeCoverage]
 public record CreateCheckInRequestDto
 {
     /// <summary>
