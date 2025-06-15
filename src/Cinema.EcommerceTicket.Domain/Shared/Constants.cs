@@ -27,4 +27,10 @@ public static class Constants
         public static string MONGODB_DATABASE_NAME => Environment.GetEnvironmentVariable("MONGODB_DATABASE_NAME") ?? throw new ConfigurationErrorsException("A variável de amibente MONGODB_DATABASE_NAME não pode ser nula.");
         public static string MONGODB_TICKETS_COLLECTION_NAME => Environment.GetEnvironmentVariable("MONGODB_TICKETS_COLLECTION_NAME") ?? throw new ConfigurationErrorsException("A variável de amibente MONGODB_TICKETS_COLLECTION_NAME não pode ser nula.");
     }
+
+    public static class Redis
+    {
+        public static string REDIS_CONNECTION_STRING => Environment.GetEnvironmentVariable("REDIS_CONNECTION_STRING") ?? throw new ConfigurationErrorsException("A variável de amibente REDIS_CONNECTION_STRING não pode ser nula.");
+        public static string REDIS_INSTANCE_NAME => $"{ENVIRONMENT}.cinemaEcommerceTicket:";
+    }
 }
