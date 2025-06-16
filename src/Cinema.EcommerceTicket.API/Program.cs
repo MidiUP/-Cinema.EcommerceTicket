@@ -1,69 +1,70 @@
 using System.Diagnostics.CodeAnalysis;
-
 using Cinema.EcommerceTicket.API.Filters;
 using Cinema.EcommerceTicket.Domain;
 using Cinema.EcommerceTicket.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 
-[ExcludeFromCodeCoverage]
-internal static class Program
+namespace Cinema.EcommerceTicket.API
 {
-
-    public static void Main(string[] args)
+    [ExcludeFromCodeCoverage]
+    public partial class Program
     {
-
-        var builder = WebApplication.CreateBuilder(args);
-
-        // Add services to the container.
-
-        builder.Services.AddControllers(options =>
+        public static void Main(string[] args)
         {
-            options.Filters.Add<ExceptionFilter>();
-        })
-        .AddNewtonsoftJson()
-        .AddJsonOptions(options =>
-        {
-            options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-        });
 
-        builder.Services.AddRouting(options =>
-        {
-            options.LowercaseUrls = true;
-            options.LowercaseQueryStrings = true;
-            options.AppendTrailingSlash = false;
-        });
+            var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddApiVersioning(options =>
-        {
-            options.AssumeDefaultVersionWhenUnspecified = true;
-            options.DefaultApiVersion = new ApiVersion(1, 0);
-            options.ReportApiVersions = true;
-        });
+            // Add services to the container.
 
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add<ExceptionFilter>();
+            })
+            .AddNewtonsoftJson()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+            });
 
-        builder.Services.AddDomainServices();
-        builder.Services.AddInfrastructureServices();
+            builder.Services.AddRouting(options =>
+            {
+                options.LowercaseUrls = true;
+                options.LowercaseQueryStrings = true;
+                options.AppendTrailingSlash = false;
+            });
 
-        var app = builder.Build();
+            builder.Services.AddApiVersioning(options =>
+            {
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.ReportApiVersions = true;
+            });
 
-        // Configure the HTTP request pipeline.
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
 
-        app.UseAuthorization();
+            builder.Services.AddDomainServices();
+            builder.Services.AddInfrastructureServices();
 
-        app.MapControllers();
+            var app = builder.Build();
 
-        app.MapHealthChecks("/health", new HealthCheckOptions());
+            // Configure the HTTP request pipeline.
 
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-            builder.Logging.AddConsole();
+            app.UseAuthorization();
+
+            app.MapControllers();
+
+            app.MapHealthChecks("/health", new HealthCheckOptions());
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+                builder.Logging.AddConsole();
+            }
+
+            app.Run();
         }
-
-        app.Run();
     }
 }

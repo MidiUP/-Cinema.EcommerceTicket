@@ -9,7 +9,7 @@ namespace Cinema.EcommerceTicket.API.Controllers.V1;
 [ExcludeFromCodeCoverage]
 [ApiVersion("1.0")]
 [CinemaEcommerceTicketVersionedRoute("1")]
-public class TicketController(ITicketService ticketService) : CinemaEcommerceTicketControllerBase
+public class TicketsController(ITicketService ticketService) : CinemaEcommerceTicketControllerBase
 {
     public readonly ITicketService _ticketService = ticketService;
 

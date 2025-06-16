@@ -8,6 +8,10 @@ public static class Setup
 {
     public static void AddRedis(this IServiceCollection services)
     {
-        services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(Constants.Redis.REDIS_CONNECTION_STRING));
+        try
+        {
+            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(Constants.Redis.REDIS_CONNECTION_STRING));
+        }
+        catch (Exception ex) { }
     }
 }
