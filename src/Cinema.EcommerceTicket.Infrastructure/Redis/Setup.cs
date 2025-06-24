@@ -12,6 +12,6 @@ public static class Setup
         {
             services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(Constants.Redis.REDIS_CONNECTION_STRING));
         }
-        catch (Exception ex) { }
+        catch { }
     }
 }

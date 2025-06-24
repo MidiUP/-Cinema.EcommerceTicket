@@ -65,7 +65,7 @@ public class TicketServiceTests
         // Arrange
         var ticket = new TicketModel { MovieId = 1, CustomerId = 1, Price = 10m };
         _cacheRepositoryMock.Setup(x => x.ExistsAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-        _catalogApiFacadeMock.Setup(x => x.GetDetailsMovieAsync(ticket.MovieId, It.IsAny<CancellationToken>())).ReturnsAsync((DetailsMovieModel?)null);
+        _catalogApiFacadeMock.Setup(x => x.GetDetailsMovieAsync(ticket.MovieId, It.IsAny<CancellationToken>()))!.ReturnsAsync((DetailsMovieModel?)null);
 
         var service = CreateService();
 

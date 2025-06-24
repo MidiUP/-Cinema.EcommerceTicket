@@ -2,64 +2,67 @@
 using Cinema.EcommerceTicket.Domain.Dtos.Responses;
 using Cinema.EcommerceTicket.Domain.Models;
 using Cinema.EcommerceTicket.Domain.Shared;
+using Cinema.EcommerceTicket.Integration.Tests.Config;
+using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using Newtonsoft.Json;
+using NUnit.Framework;
+using Assert = NUnit.Framework.Assert;
 
 namespace Cinema.EcommerceTicket.Integration.Tests.Controllers.V1.TicketController;
 
-public class TicketIntegrationTests(CinemaEcommerceTicketWebApplicationFactory factory) : IClassFixture<CinemaEcommerceTicketWebApplicationFactory>
+[TestFixture]
+public class TicketIntegrationTests : CinemaEcommerceTicketWebApplicationFactory
 {
-    private readonly CinemaEcommerceTicketWebApplicationFactory _factory = factory;
     private readonly Fixture _fixture = new Fixture();
 
-    [Fact]
-    public async Task Shold_Returns200_And_Find_Ticket()
+    [Test]
+    public async Task Shold_Returns200_If_Find_Ticket()
     {
         //Arrange
-        _factory.ConfigureEnvironmentVariables();
-        var mongoDatabase = _factory._mongoDatabase;
+        var mongoDatabase = Scope!.ServiceProvider.GetRequiredService<IMongoDatabase>();
 
         var ticket = _fixture.Create<TicketModel>();
-        ticket.Id = null; // Garante que o Id seja nulo para que o MongoDB gere um novo Id
+        ticket.Id = string.Empty; // Garante que o Id seja nulo para que o MongoDB gere um novo Id
         ticket.CustomerId = 1;
 
         // Limpa a coleção e cadastra um ticket antes do teste
-        await mongoDatabase.DropCollectionAsync(Constants.MongoDb.MONGODB_TICKETS_COLLECTION_NAME);
+        await ClearMongoDb();
         var collection = mongoDatabase.GetCollection<TicketModel>(Constants.MongoDb.MONGODB_TICKETS_COLLECTION_NAME);
         await collection.InsertOneAsync(ticket);
 
-        var client = _factory.CreateClient();
-
         //Act
-        var resultHttp = await client.GetAsync("/api/v1/tickets/1");
+        var resultHttp = await Client!.GetAsync("/api/v1/tickets/1");
         var tickets = JsonConvert.DeserializeObject<IEnumerable<GetTicketResponseDto>>(await resultHttp.Content.ReadAsStringAsync());
 
         //Assert
-        Assert.Equal(System.Net.HttpStatusCode.OK, resultHttp.StatusCode);
-        Assert.NotNull(tickets);
-        Assert.Single(tickets);
-        Assert.Equal(ticket.MovieId, tickets.First().MovieId);
-        Assert.Equal(ticket.CustomerId, tickets.First().CustomerId);
+        Assert.That(resultHttp.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
+        Assert.That(tickets, Is.Not.Null);
+        Assert.That(tickets?.Count(), Is.EqualTo(1));
+        Assert.That(tickets?.First().MovieId, Is.EqualTo(ticket.MovieId));
+        Assert.That(tickets?.First().CustomerId, Is.EqualTo(ticket.CustomerId));
     }
 
-    [Fact]
-    public async Task Shold_Returns204_And_Not_Find_Ticket()
+    [Test]
+    public async Task Shold_Returns204_If_Not_Find_Ticket()
     {
         //Arrange
-        _factory.ConfigureEnvironmentVariables();
-
-        // Limpa a coleção antes do teste
-        var mongoDatabase = _factory._mongoDatabase;
-        await mongoDatabase.DropCollectionAsync(Constants.MongoDb.MONGODB_TICKETS_COLLECTION_NAME);
-
-        var client = _factory.CreateClient();
+        await ClearMongoDb();
 
         //Act
-        var resultHttp = await client.GetAsync("/api/v1/tickets/1");
+        var resultHttp = await Client!.GetAsync("/api/v1/tickets/1");
         var tickets = JsonConvert.DeserializeObject<IEnumerable<GetTicketResponseDto>>(await resultHttp.Content.ReadAsStringAsync());
 
         //Assert
-        Assert.Equal(System.Net.HttpStatusCode.NoContent, resultHttp.StatusCode);
-        Assert.Null(tickets);
+        Assert.That(resultHttp.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NoContent));
+        Assert.That(tickets, Is.Null);
+    }
+
+    private async Task ClearMongoDb()
+    {
+        var mongoDatabase = Scope!.ServiceProvider.GetRequiredService<IMongoDatabase>();
+        await mongoDatabase.DropCollectionAsync(Constants.MongoDb.MONGODB_TICKETS_COLLECTION_NAME);
+        var collection = mongoDatabase.GetCollection<TicketModel>(Constants.MongoDb.MONGODB_TICKETS_COLLECTION_NAME);
+        await collection.DeleteManyAsync(FilterDefinition<TicketModel>.Empty);
     }
 }
