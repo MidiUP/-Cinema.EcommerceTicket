@@ -7,19 +7,20 @@ using Cinema.EcommerceTicket.Infrastructure.MongoDb;
 using Cinema.EcommerceTicket.Infrastructure.RabbitMq;
 using Cinema.EcommerceTicket.Infrastructure.Redis;
 using Cinema.EcommerceTicket.Infrastructure.Repositories;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cinema.EcommerceTicket.Infrastructure;
 
 public static class Bootstrap
 {
-    public static void AddInfrastructureServices(this IServiceCollection services)
+    public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddRepositories();
-        services.AddMongoDb();
-        services.AddRabbitMq();
-        services.AddRedis();
-        services.AddHttpClients();
+        services.AddMongoDb(configuration);
+        services.AddRabbitMq(configuration);
+        services.AddRedis(configuration);
+        services.AddHttpClients(configuration);
         services.AddApiFacades();
     }
 

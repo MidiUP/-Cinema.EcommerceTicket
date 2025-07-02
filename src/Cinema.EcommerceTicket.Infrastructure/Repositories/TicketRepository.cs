@@ -1,6 +1,7 @@
 ﻿using Cinema.EcommerceTicket.Domain.Infrastructure.Repositories;
 using Cinema.EcommerceTicket.Domain.Models;
 using Cinema.EcommerceTicket.Domain.Shared;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace Cinema.EcommerceTicket.Infrastructure.Repositories;
@@ -8,11 +9,12 @@ namespace Cinema.EcommerceTicket.Infrastructure.Repositories;
 public class TicketRepository : ITicketRepository
 {
     private readonly IMongoCollection<TicketModel> _ticketCollection;
-    private readonly string COLLECTION_NAME = Constants.MongoDb.MONGODB_TICKETS_COLLECTION_NAME;
+    private readonly MongoDbOptions _mongoDbOptions;
 
-    public TicketRepository(IMongoDatabase database)
+    public TicketRepository(IMongoDatabase database, IOptions<MongoDbOptions> mongoDbOptions)
     {
-        _ticketCollection = database.GetCollection<TicketModel>(COLLECTION_NAME);
+        _mongoDbOptions = mongoDbOptions.Value;
+        _ticketCollection = database.GetCollection<TicketModel>(_mongoDbOptions.TicketsCollectionName);
     }
     public async Task CreateTicketAsync(TicketModel ticketModel, CancellationToken cancellationToken)
     {

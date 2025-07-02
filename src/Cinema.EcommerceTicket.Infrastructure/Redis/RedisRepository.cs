@@ -1,14 +1,15 @@
 ﻿using Cinema.EcommerceTicket.Domain.Infrastructure.Cache;
 using Cinema.EcommerceTicket.Domain.Shared;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 
 namespace Cinema.EcommerceTicket.Infrastructure.Redis;
 
-public class RedisRepository(IConnectionMultiplexer connectionMultiplexer) : ICacheRepository
+public class RedisRepository(IConnectionMultiplexer connectionMultiplexer, IOptions<RedisOptions> redisOptions) : ICacheRepository
 {
     private readonly IDatabase _db = connectionMultiplexer.GetDatabase();
-    private readonly string REDIS_INSTANCE_NAME = Constants.Redis.REDIS_INSTANCE_NAME;
+    private readonly string REDIS_INSTANCE_NAME = redisOptions.Value.RedisInstanceName;
 
 
     public async Task<bool> ExistsAsync(string key, CancellationToken cancellationToken)

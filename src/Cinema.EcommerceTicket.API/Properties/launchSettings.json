@@ -6,17 +6,7 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ENV": "dev",
-        "RABBIMQ_HOST": "localhost",
-        "RABBIMQ_PORT": "5672",
-        "RABBIMQ_USERNAME": "username",
-        "RABBIMQ_PASSWORD": "password",
-        "QUEUE_CREATE_ECOMMERCE_TICKET_NAME": "cinema-ecommerce-criacao-ticket",
-        "MONGODB_CONNECTION_STRING": "mongodb://root:example@localhost:27018?retryWrites=false",
-        "MONGODB_DATABASE_NAME": "cinema_ecommerce_ticket",
-        "MONGODB_TICKETS_COLLECTION_NAME": "tickets",
-        "CATALOG_API_BASE_URL": "http://localhost:5002/api/v1",
-        "REDIS_CONNECTION_STRING": "localhost:6379,password=MinhaSenhaRedis,abortConnect=false"
+        "ENV": "dev"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5045"

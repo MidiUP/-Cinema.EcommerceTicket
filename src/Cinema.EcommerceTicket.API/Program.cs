@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Cinema.EcommerceTicket.API.Filters;
 using Cinema.EcommerceTicket.Domain;
+using Cinema.EcommerceTicket.Domain.Shared;
 using Cinema.EcommerceTicket.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
@@ -44,8 +45,9 @@ namespace Cinema.EcommerceTicket.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.ConfigureOptions(builder.Configuration);
             builder.Services.AddDomainServices();
-            builder.Services.AddInfrastructureServices();
+            builder.Services.AddInfrastructureServices(builder.Configuration);
 
             var app = builder.Build();
 

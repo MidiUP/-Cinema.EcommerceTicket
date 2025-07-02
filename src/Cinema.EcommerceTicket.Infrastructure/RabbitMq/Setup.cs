@@ -2,6 +2,7 @@
 using Cinema.EcommerceTicket.Domain.Shared;
 using Cinema.EcommerceTicket.Infrastructure.RabbitMq.Consumers;
 using MassTransit;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -9,14 +10,12 @@ namespace Cinema.EcommerceTicket.Infrastructure.RabbitMq;
 
 public static class Setup
 {
-    private static readonly string HOST_RABBIMQ = Constants.RabbitMq.RABBIMQ_HOST;
-    private static readonly string HOST_RABBIMQ_USERNAME = Constants.RabbitMq.RABBIMQ_USERNAME;
-    private static readonly string HOST_RABBIMQ_PASSWORD = Constants.RabbitMq.RABBIMQ_PASSWORD;
-
-    private static readonly string QUEUE_CREATE_ECOMMERCE_TICKET_NAME = GetNameQueue(Constants.RabbitMq.QUEUE_CREATE_ECOMMERCE_TICKET_NAME);
-
-    public static void AddRabbitMq(this IServiceCollection services)
+    public static void AddRabbitMq(this IServiceCollection services, IConfiguration configuration)
     {
+        var rabbitMqOptions = configuration.GetSection("RabbitMq").Get<RabbitMqOptions>()!;
+
+        var queueCreateEcommerceTicketName = GetNameQueue(rabbitMqOptions.QueueCreateEcommerceTicketName);
+
         services.AddMassTransit(x =>
         {
             x.AddConsumer<CreateTicketConsumer>();
@@ -25,10 +24,10 @@ public static class Setup
             x.UsingRabbitMq((context, cfg) =>
             {
                 
-                cfg.Host(HOST_RABBIMQ, "/", h =>
+                cfg.Host(rabbitMqOptions.Host, "/", h =>
                 {
-                    h.Username(HOST_RABBIMQ_USERNAME);
-                    h.Password(HOST_RABBIMQ_PASSWORD);
+                    h.Username(rabbitMqOptions.Username);
+                    h.Password(rabbitMqOptions.Password);
                 });
 
                 cfg.UseConsumeFilter(typeof(GlobalExceptionFilter<>), context);
@@ -44,7 +43,7 @@ public static class Setup
                     r.Ignore(typeof(CinemaEcommerceTicketException));
                 });
 
-                AddConsumer<CreateTicketConsumer>(cfg, context, QUEUE_CREATE_ECOMMERCE_TICKET_NAME);
+                AddConsumer<CreateTicketConsumer>(cfg, context, queueCreateEcommerceTicketName);
 
             });
         });

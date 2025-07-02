@@ -32,7 +32,7 @@ public class TicketService(ILogger<TicketService> logger,
 
         //lógica para calcular preço seria aplicada aqui, gerando número aleatório para simular preço
         ticketModel.Price = Math.Round((decimal)(new Random().NextDouble() * 100), 2);
-        ticketModel.CreatedAt = DateTime.Now;
+        ticketModel.CreatedAt = DateTime.UtcNow;
 
         var validationModel = ticketModel.Validation();
         if(!validationModel.IsValid)
@@ -67,7 +67,7 @@ public class TicketService(ILogger<TicketService> logger,
         var detailsMovie = await _catalogApiFacade.GetDetailsMovieAsync(movieId, (CancellationToken)cancellationToken);
 
         //salvar cache
-        await _cacheRepository.SetAsync<DetailsMovieModel>(cacheKey, detailsMovie, DEFAULT_TIME_CACHE_DETAILS_MOVIE, (CancellationToken)cancellationToken);
+        await _cacheRepository.SetAsync(cacheKey, detailsMovie, DEFAULT_TIME_CACHE_DETAILS_MOVIE, (CancellationToken)cancellationToken);
 
         return detailsMovie;
     }

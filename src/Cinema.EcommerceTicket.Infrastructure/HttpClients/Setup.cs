@@ -1,4 +1,5 @@
 ﻿using Cinema.EcommerceTicket.Domain.Shared;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Extensions.Http;
@@ -8,16 +9,18 @@ namespace Cinema.EcommerceTicket.Infrastructure.HttpClients;
 
 public static class Setup
 {
-    public static void AddHttpClients(this IServiceCollection services)
+    public static void AddHttpClients(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddCatalogApiHttpClient();
+        services.AddCatalogApiHttpClient(configuration);
     }
 
-    private static void AddCatalogApiHttpClient(this IServiceCollection services)
+    private static void AddCatalogApiHttpClient(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddHttpClient(Constants.CatalogApi.NAME, httpClient =>
+        var catalogApiOptions = configuration.GetSection("CatalogApi").Get<CatalogApiOptions>()!;
+
+        services.AddHttpClient(catalogApiOptions.Name, httpClient =>
         {
-            httpClient.BaseAddress = new Uri(Constants.CatalogApi.BASE_URL);
+            httpClient.BaseAddress = new Uri(catalogApiOptions.BaseUrl);
         })
         .AddPolicyHandler(GetRetryPolicy());
     }

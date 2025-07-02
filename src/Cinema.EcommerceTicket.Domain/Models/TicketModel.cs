@@ -33,10 +33,11 @@ public class TicketModel : IModelValidator
     /// Preco do ticket
     /// </summary>
     public decimal Price { get; set; }
-    
+
     /// <summary>
     /// Data de criação do ticket
     /// </summary>
+    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
     public DateTime CreatedAt { get; set; }
 
     public ValidationResult Validation()
