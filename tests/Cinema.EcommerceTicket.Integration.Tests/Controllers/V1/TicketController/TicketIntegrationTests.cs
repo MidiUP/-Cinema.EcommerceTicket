@@ -28,7 +28,7 @@ public class TicketIntegrationTests : CinemaEcommerceTicketWebApplicationFactory
 
         // Limpa a coleção e cadastra um ticket antes do teste
         await ClearMongoDb();
-        var collection = mongoDatabase.GetCollection<TicketModel>(Constants.MongoDb.MONGODB_TICKETS_COLLECTION_NAME);
+        var collection = mongoDatabase.GetCollection<TicketModel>("any_ticketsCollectionName");
         await collection.InsertOneAsync(ticket);
 
         //Act
@@ -61,8 +61,8 @@ public class TicketIntegrationTests : CinemaEcommerceTicketWebApplicationFactory
     private async Task ClearMongoDb()
     {
         var mongoDatabase = Scope!.ServiceProvider.GetRequiredService<IMongoDatabase>();
-        await mongoDatabase.DropCollectionAsync(Constants.MongoDb.MONGODB_TICKETS_COLLECTION_NAME);
-        var collection = mongoDatabase.GetCollection<TicketModel>(Constants.MongoDb.MONGODB_TICKETS_COLLECTION_NAME);
+        await mongoDatabase.DropCollectionAsync("any_ticketsCollectionName");
+        var collection = mongoDatabase.GetCollection<TicketModel>("any_ticketsCollectionName");
         await collection.DeleteManyAsync(FilterDefinition<TicketModel>.Empty);
     }
 }
