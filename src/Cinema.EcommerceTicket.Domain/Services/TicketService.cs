@@ -9,8 +9,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Cinema.EcommerceTicket.Domain.Services;
 
-public class TicketService(ILogger<TicketService> logger, 
-    ITicketRepository ticketRepository, 
+/// <summary>
+/// Serviço responsável pelo gerenciamento de tickets, incluindo criação, consulta e obtenção de detalhes de filmes.
+/// </summary>
+/// <remarks>
+/// Implementa as regras de negócio para manipulação de tickets, validação de dados, integração com repositórios, cache e API de catálogo.
+/// </remarks>
+public class TicketService(ILogger<TicketService> logger,
+    ITicketRepository ticketRepository,
     ICatalogApiFacade catalogApiFacade,
     ICacheRepository cacheRepository) : ITicketService
 {
@@ -22,6 +28,12 @@ public class TicketService(ILogger<TicketService> logger,
     private readonly TimeSpan DEFAULT_TIMEOUT = TimeSpan.FromSeconds(30);
     private readonly TimeSpan DEFAULT_TIME_CACHE_DETAILS_MOVIE = TimeSpan.FromHours(24);
 
+    /// <summary>
+    /// Cria um novo ticket após validar o filme, calcular o preço e validar o modelo.
+    /// </summary>
+    /// <param name="ticketModel">Objeto <see cref="TicketModel"/> representando o ticket a ser criado.</param>
+    /// <exception cref="DomainException">Lançada se o filme não for encontrado.</exception>
+    /// <exception cref="ValidationException">Lançada se o modelo do ticket for inválido.</exception>
     public async Task CreateTicketAsync(TicketModel ticketModel)
     {
         var cts = new CancellationTokenSource(DEFAULT_TIMEOUT);
@@ -35,7 +47,7 @@ public class TicketService(ILogger<TicketService> logger,
         ticketModel.CreatedAt = DateTime.UtcNow;
 
         var validationModel = ticketModel.Validation();
-        if(!validationModel.IsValid)
+        if (!validationModel.IsValid)
         {
             _logger.LogWarning("Erro ao validar o ticket: {Errors}", validationModel.Errors);
             throw new ValidationException(validationModel.Errors);
@@ -44,12 +56,23 @@ public class TicketService(ILogger<TicketService> logger,
         await _ticketRepository.CreateTicketAsync(ticketModel, cts.Token);
     }
 
+    /// <summary>
+    /// Obtém todos os tickets associados a um cliente específico.
+    /// </summary>
+    /// <param name="customerId">Identificador do cliente.</param>
+    /// <returns>Uma coleção de <see cref="TicketModel"/> pertencentes ao cliente informado.</returns>
     public async Task<IEnumerable<TicketModel>> GetTicketsByCostumerAsync(int customerId)
     {
         var cts = new CancellationTokenSource(DEFAULT_TIMEOUT);
         return await _ticketRepository.GetTicketsByCustomerAsync(customerId, cts.Token);
     }
 
+    /// <summary>
+    /// Obtém os detalhes de um filme a partir do cache ou da API de catálogo, armazenando em cache se necessário.
+    /// </summary>
+    /// <param name="movieId">Identificador do filme.</param>
+    /// <param name="cancellationToken">Token para cancelamento da operação assíncrona (opcional).</param>
+    /// <returns>Um <see cref="DetailsMovieModel"/> com as informações detalhadas do filme, ou <c>null</c> se não encontrado.</returns>
     public async Task<DetailsMovieModel?> GetDetailsMovieAsync(int movieId, CancellationToken? cancellationToken = default)
     {
         cancellationToken ??= new CancellationTokenSource(DEFAULT_TIMEOUT).Token;
@@ -57,7 +80,7 @@ public class TicketService(ILogger<TicketService> logger,
 
         //obter em cache
         var existsKey = await _cacheRepository.ExistsAsync(cacheKey, (CancellationToken)cancellationToken);
-        if(existsKey)
+        if (existsKey)
         {
             _logger.LogInformation("Existe chave para os detalhes do filme {MovieId} no cache.", movieId);
             return await _cacheRepository.GetAsync<DetailsMovieModel>(cacheKey, (CancellationToken)cancellationToken);
