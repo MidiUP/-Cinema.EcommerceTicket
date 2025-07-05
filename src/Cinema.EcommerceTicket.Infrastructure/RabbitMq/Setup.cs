@@ -32,6 +32,8 @@ public static class Setup
 
                 cfg.UseConsumeFilter(typeof(GlobalExceptionFilter<>), context);
 
+                cfg.UseDelayedRedelivery(r => r.Intervals(TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(15), TimeSpan.FromMinutes(30)));
+
                 cfg.UseMessageRetry(r =>
                 {
                     r.Exponential(
