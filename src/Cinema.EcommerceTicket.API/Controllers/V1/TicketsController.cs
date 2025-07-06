@@ -18,9 +18,9 @@ public class TicketsController(ITicketService ticketService) : CinemaEcommerceTi
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<ErrorResponseDto>(StatusCodes.Status408RequestTimeout)]
     [ProducesResponseType<ErrorResponseDto>(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> CheckInTicketAsync([FromRoute] string customerId)
+    public async Task<ActionResult> CheckInTicketAsync([FromRoute] int customerId)
     {
-        var response = await _ticketService.GetTicketsByCostumerAsync(int.Parse(customerId));
+        var response = await _ticketService.GetTicketsByCostumerAsync(customerId);
         
         if(response is null || !response.Any())
             return NoContent();
