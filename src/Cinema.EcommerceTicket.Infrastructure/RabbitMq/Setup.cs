@@ -33,15 +33,13 @@ public static class Setup
 
                 cfg.UseConsumeFilter(typeof(GlobalExceptionFilter<>), context);
 
-                cfg.UseDelayedRedelivery(r => r.Intervals(TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(15), TimeSpan.FromMinutes(30)));
-
                 cfg.UseMessageRetry(r =>
                 {
                     r.Exponential(
                         retryLimit: 3,                  // Número de tentativas
-                        minInterval: TimeSpan.FromSeconds(10),   // Intervalo inicial
-                        maxInterval: TimeSpan.FromSeconds(60),  // Intervalo máximo
-                        intervalDelta: TimeSpan.FromSeconds(25)  // Fator de crescimento exponencial
+                        minInterval: TimeSpan.FromSeconds(30),   // Intervalo inicial
+                        maxInterval: TimeSpan.FromSeconds(300),  // Intervalo máximo
+                        intervalDelta: TimeSpan.FromSeconds(90)  // Fator de crescimento exponencial
                     );
                     r.Ignore(typeof(CinemaEcommerceTicketException));
                 });
@@ -86,6 +84,7 @@ public static class Setup
 
         cfg.ReceiveEndpoint(queue, e =>
         {
+            //e.UseConsumeFilter(typeof(ConsumeFilter<>), context);
             e.ConfigureConsumer<T>(context);
         });
     }

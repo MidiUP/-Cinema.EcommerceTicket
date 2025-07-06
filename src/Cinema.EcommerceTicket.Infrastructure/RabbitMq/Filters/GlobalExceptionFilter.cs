@@ -10,9 +10,9 @@ public class GlobalExceptionFilter<T>(ILogger<GlobalExceptionFilter<T>> logger) 
     {
         try
         {
-            var isRetry = context.GetRedeliveryCount() > 0;
-            if(isRetry) 
-                _logger.LogWarning("Executando retentativa de mensagem do tipo {MessageType}", typeof(T).Name);
+            var retryCount = context.GetRetryCount();
+            if (retryCount > 0) 
+                _logger.LogWarning("Executando retentativa de mensagem do tipo {MessageType}. Retentativa de número {retryCount}", typeof(T).Name, retryCount + 1); //adicionando +1 por conta de comportamento do mass transit de no primeiro retry o getRetryCount trazer 0
             await next.Send(context);
         }
         catch(CinemaEcommerceTicketException ex)
