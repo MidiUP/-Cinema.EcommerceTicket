@@ -5,6 +5,7 @@ using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using RabbitMQ.Client;
 
 namespace Cinema.EcommerceTicket.Infrastructure.RabbitMq;
 
@@ -46,9 +47,26 @@ public static class Setup
                 });
 
                 AddConsumer<CreateTicketConsumer>(cfg, context, queueCreateEcommerceTicketName);
-
             });
         });
+
+        services.AddHealthChecks()
+            .AddRabbitMQ(async s =>
+            {
+                var factory = new ConnectionFactory
+                {
+                    HostName = rabbitMqOptions.Host,
+                    UserName = rabbitMqOptions.Username,
+                    Password = rabbitMqOptions.Password,
+                    Port = int.TryParse(rabbitMqOptions.Port, out var port) ? port : AmqpTcpEndpoint.UseDefaultPort
+                };
+                return await factory.CreateConnectionAsync();
+            },
+            name: "RabbitMQ",
+            failureStatus: HealthStatus.Unhealthy,
+            tags: ["health"],
+            timeout: TimeSpan.FromSeconds(2)
+            );
     }
 
     private static void ConfigureHealthCheck(IBusRegistrationConfigurator x)
@@ -74,6 +92,6 @@ public static class Setup
 
     private static string GetNameQueue(string queueName)
     {
-        return $"{Constants.ENVIRONMENT}.{queueName}";
+        return $"{Domain.Shared.Constants.ENVIRONMENT}.{queueName}";
     }
 }

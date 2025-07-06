@@ -1,6 +1,7 @@
 ﻿using Cinema.EcommerceTicket.Domain.Shared;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Driver;
 
 namespace Cinema.EcommerceTicket.Infrastructure.MongoDb;
@@ -23,7 +24,15 @@ public static class Setup
         var mongoDbOptions = configuration.GetSection("MongoDb").Get<MongoDbOptions>()!;
 
         services.AddSingleton<IMongoClient>(sp =>
-            new MongoClient(mongoDbOptions.ConnectionString));
+            new MongoClient(mongoDbOptions.ConnectionString))
+            .AddHealthChecks()
+            .AddMongoDb(
+                sp => sp.GetRequiredService<IMongoDatabase>(),
+                name: "mongodb",
+                failureStatus: HealthStatus.Unhealthy,
+                tags: ["mongodb", "database"],
+                timeout: TimeSpan.FromSeconds(2)
+            );
 
         services.AddScoped(sp =>
         {
