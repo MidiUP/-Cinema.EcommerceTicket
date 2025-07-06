@@ -25,7 +25,7 @@ public class TicketService(ILogger<TicketService> logger,
     private readonly ICatalogApiFacade _catalogApiFacade = catalogApiFacade;
     private readonly ICacheRepository _cacheRepository = cacheRepository;
 
-    private readonly TimeSpan DEFAULT_TIMEOUT = TimeSpan.FromSeconds(30);
+    private readonly TimeSpan DEFAULT_TIMEOUT = TimeSpan.FromSeconds(15);
     private readonly TimeSpan DEFAULT_TIME_CACHE_DETAILS_MOVIE = TimeSpan.FromHours(24);
 
     /// <summary>
